@@ -54,6 +54,8 @@ IF(NOT DEFINED ICMAKER_DIRECTORY)
   project(liblanelet)
 ENDIF()
 
+add_definitions(-D PUGIXML_HAS_LONG_LONG)
+
 
 # To be used by other modules
 SET(LIBLANELET_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/src" "${CMAKE_CURRENT_BINARY_DIR}/src" CACHE INTERNAL "")
@@ -61,6 +63,11 @@ SET(LIBLANELET_IDL_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/src" CACHE INTERNAL "")
 SET(LIBLANELET_IDE_FOLDER "liblanelet")
 
 ICMAKER_REGISTER_PACKAGE(liblanelet)
+
+find_package(catkin)
+catkin_package(
+   INCLUDE_DIRS src
+   LIBRARIES ${PROJECT_NAME})
 
 ADD_SUBDIRECTORY(src/liblanelet)
 ADD_SUBDIRECTORY(src/tools)
