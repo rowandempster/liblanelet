@@ -705,7 +705,6 @@ point_with_id_t LaneletMap::map_matching(const point_with_id_t &source, lanelet_
   lanelet_ptr_t result;
   BOOST_FOREACH(const lanelet_ptr_t &llet, lanelets)
   {
-    int64_t ll_id = llet->id();
     double const distance = llet->distance_to(source);
     llet->project(source, heading);
     if (distance < min_distance && (!check_heading || (M_PI - std::abs(std::abs(*heading - vehicle_heading) - M_PI)) < threshold))
