@@ -672,7 +672,7 @@ point_with_id_t LaneletMap::map_matching(const point_with_id_t &source, lanelet_
   if (lanelet && lanelet->covers_point(source))
   {
     point_with_id_t result = lanelet->project(source, heading);
-    if (!check_heading || std::abs(*heading - vehicle_heading) < threshold)
+    if (!check_heading || (M_PI - std::abs(std::abs(*heading - vehicle_heading) - M_PI)) < threshold)
     {
       heading = (reset_heading) ? NULL : heading;
       return result;
@@ -692,7 +692,7 @@ point_with_id_t LaneletMap::map_matching(const point_with_id_t &source, lanelet_
     if (llet->covers_point(source))
     {
       point_with_id_t result = llet->project(source, heading);
-      if (!check_heading || std::abs(*heading - vehicle_heading) < threshold)
+      if (!check_heading || (M_PI - std::abs(std::abs(*heading - vehicle_heading) - M_PI)) < threshold)
       {
         lanelet = llet;
         heading = (reset_heading) ? NULL : heading;
@@ -705,9 +705,10 @@ point_with_id_t LaneletMap::map_matching(const point_with_id_t &source, lanelet_
   lanelet_ptr_t result;
   BOOST_FOREACH(const lanelet_ptr_t &llet, lanelets)
   {
+    int64_t ll_id = llet->id();
     double const distance = llet->distance_to(source);
     llet->project(source, heading);
-    if (distance < min_distance && (!check_heading || std::abs(*heading - vehicle_heading) < threshold))
+    if (distance < min_distance && (!check_heading || (M_PI - std::abs(std::abs(*heading - vehicle_heading) - M_PI)) < threshold))
     {
       min_distance = distance;
       result = llet;
