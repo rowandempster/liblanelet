@@ -57,4 +57,12 @@ inline double normalize_angle( double a )
   return float_modulo( a + M_PI, 2*M_PI) - M_PI;  
 }
 
+inline double normalize_angle_positive( double a )
+{
+  a = float_modulo(a, 2*M_PI);
+  if (a < 0)
+    a += 2*M_PI;
+  return a;
+}
+
 #endif // NORMALIZE_ANGLE_HPP

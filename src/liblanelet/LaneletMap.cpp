@@ -661,6 +661,8 @@ point_with_id_t LaneletMap::map_matching(const point_with_id_t &source, lanelet_
 {
   double heading_value = 0; // temp variable whose pointer might be needed later in project()
   bool reset_heading = false; // needed to check whether heading has to be reset to a nullptr
+  vehicle_heading = normalize_angle_positive(vehicle_heading);
+
 
   if (check_heading && !heading)
   {
@@ -672,7 +674,8 @@ point_with_id_t LaneletMap::map_matching(const point_with_id_t &source, lanelet_
   if (lanelet && lanelet->covers_point(source))
   {
     point_with_id_t result = lanelet->project(source, heading);
-    if (!check_heading || std::abs(*heading - vehicle_heading) < threshold)
+    double norm_heading = normalize_angle_positive(*heading);
+    if (!check_heading || (M_PI - std::abs(std::abs(norm_heading - vehicle_heading) - M_PI)) < threshold)
     {
       heading = (reset_heading) ? NULL : heading;
       return result;
@@ -692,7 +695,8 @@ point_with_id_t LaneletMap::map_matching(const point_with_id_t &source, lanelet_
     if (llet->covers_point(source))
     {
       point_with_id_t result = llet->project(source, heading);
-      if (!check_heading || std::abs(*heading - vehicle_heading) < threshold)
+      double norm_heading = normalize_angle_positive(*heading);
+      if (!check_heading || (M_PI - std::abs(std::abs(norm_heading - vehicle_heading) - M_PI)) < threshold)
       {
         lanelet = llet;
         heading = (reset_heading) ? NULL : heading;
@@ -707,7 +711,8 @@ point_with_id_t LaneletMap::map_matching(const point_with_id_t &source, lanelet_
   {
     double const distance = llet->distance_to(source);
     llet->project(source, heading);
-    if (distance < min_distance && (!check_heading || std::abs(*heading - vehicle_heading) < threshold))
+    double norm_heading = normalize_angle_positive(*heading);
+    if (distance < min_distance && (!check_heading || (M_PI - std::abs(std::abs(norm_heading - vehicle_heading) - M_PI)) < threshold))
     {
       min_distance = distance;
       result = llet;
